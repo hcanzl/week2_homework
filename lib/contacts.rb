@@ -62,30 +62,63 @@ class Contacts
   #########
 
   def format_contact contact
+    %{"#{contact[:full_name]} of #{contact[:city]} #{contact[:state]}" <#{contact[:email]}>} 
   end
 
   def all
+    @contacts
   end
 
   def formatted_list
+    list = String.new
+    @contacts[0..-2].each do |contact|
+      list << format_contact(contact) << "\n"
+    end
+    list << format_contact(@contacts[-1])
   end
 
   def full_names
+    contact_full_names = Array.new()
+    @contacts.each do |contact|
+      contact_full_names.push(contact[:full_name])
+    end
+    
+    return contact_full_names
   end
 
   def cities
+    unique_cities = Array.new()
+    @contacts.each do |contact|
+      unique_cities.push(contact[:city]) if (!unique_cities.include?(contact[:city])) 
+    end
+    
+    return unique_cities
   end
 
   def append_contact contact
+    @contacts << contact
   end
 
   def delete_contact index
+    @contacts.delete_at(index)
   end
 
   def search string
+    string_match = Array.new
+    @contacts.each do |contact|
+      contact.each do |key, value|
+        if (value.eql?(string))
+          string_match.push(contact)
+          break
+        end
+      end
+    end
+    return string_match
   end
 
   def all_sorted_by field
+    sorted = @contacts.sort_by { |key| key[field] }
+    return sorted
   end
   
 end

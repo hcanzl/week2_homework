@@ -72,11 +72,12 @@ describe Contacts do
   it '#cities returns array of unique cities' do
     subject.cities.should eq ["Seattle", "Washington"]
   end
+  
   it '#append_contact(pipe_delimited_string) adds a contact' do
     initial_array = subject.all
     new_contact = {full_name: "George Washington", city: "Washington", state: "DC", email: "1st@wh.gov"}
     expected = initial_array << new_contact
-
+    
     # act
     subject.append_contact(new_contact)
 
@@ -105,14 +106,23 @@ describe Contacts do
     actual.should eq expected
   end
 
-  it '#all_sorted_by(field) returns contacts sorted alphabetically by that field' do
+  it '#all_sorted_by(field) returns contacts sorted alphabetically by that field - full_name' do
     expected =  [
                   {full_name: "Barack Obama", city: "Washington", state: "DC", email: "president@wh.gov"},
                   {full_name: "Brandon Faloona", city: "Seattle", state: "WA", email: "bfaloona@uw.edu"},
-                  {full_name: "Jason Shaw", city: "Seattle", state: "WA", email: "shawjaso@uw.edu"},
+                  {full_name: "Jason Shaw", city: "Seattle", state: "WA", email: "shawjaso@uw.edu"}
                 ]
-    actual = subject.search(:full_name)
+    actual = subject.all_sorted_by(:full_name)
     actual.should eq expected
   end
 
+  it '#all_sorted_by(field) returns contacts sorted alphabetically by that field - city' do
+    expected =  [
+                  {full_name: "Brandon Faloona", city: "Seattle", state: "WA", email: "bfaloona@uw.edu"},
+                  {full_name: "Jason Shaw", city: "Seattle", state: "WA", email: "shawjaso@uw.edu"},
+                  {full_name: "Barack Obama", city: "Washington", state: "DC", email: "president@wh.gov"}
+                ]
+    actual = subject.all_sorted_by(:city)
+    actual.should eq expected
+  end
 end
